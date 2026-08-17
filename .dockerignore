@@ -1,0 +1,14 @@
+# 构建镜像时排除的文件/目录
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.idea/
+.git/
+logs/
+data/ecommerce.db
+data/chat_log.jsonl
+data/chroma_db/
+.env
+frontend/node_modules/
+frontend/dist/

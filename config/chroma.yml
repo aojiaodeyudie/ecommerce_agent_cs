@@ -1,0 +1,50 @@
+# Chroma 向量库配置
+collection_name: agent            # 默认 collection（兼容旧数据）
+persist_directory: data/chroma_db
+k: 3
+score_threshold: 0.35             # 相关性阈值（A2）：低于该值的检索结果不进入回答上下文
+data_path: data/kb               # 知识数据根目录（按域分子目录）
+md5_hex_store: md5.text          # MD5 去重记录（按域自动加后缀）
+allow_konwledge_file_type: ["txt", "pdf"]
+chunk_size: 200
+chunk_overlap: 20
+separators: ["\n\n", "\n", ".", "|", "!", "?", "", "。"]
+
+# 知识库分域（阶段二 + #F9 按商家分域）：每个域一个 collection + 数据目录 + 检索 k 值
+#   product 域：商品参数走 SQLite（ecommerce.db），不需要向量库
+#   policy 域：退换政策走 config/ecommerce.yml 规则文本
+#   ai 域：智能客服平台知识（兜底，可查全部）
+#   shop_a~shop_f：6 家商家专属知识（各 50 条左右）
+domains:
+  ai:
+    collection: kb_ai
+    data_path: data/kb/ai
+    k: 3
+  shop_a:
+    collection: kb_shop_a
+    data_path: data/kb/shop_a
+    k: 3
+  shop_b:
+    collection: kb_shop_b
+    data_path: data/kb/shop_b
+    k: 3
+  shop_c:
+    collection: kb_shop_c
+    data_path: data/kb/shop_c
+    k: 3
+  shop_d:
+    collection: kb_shop_d
+    data_path: data/kb/shop_d
+    k: 3
+  shop_e:
+    collection: kb_shop_e
+    data_path: data/kb/shop_e
+    k: 3
+  shop_f:
+    collection: kb_shop_f
+    data_path: data/kb/shop_f
+    k: 3
+  manual:
+    collection: kb_manual
+    data_path: data/kb/manual
+    k: 3

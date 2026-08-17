@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电商智能客服 · 网页挂件</title>
+  <style>
+    body { margin: 0; font-family: "Microsoft YaHei", sans-serif; background: #f5f6f8; }
+    .widget-wrap { position: fixed; right: 24px; bottom: 24px; z-index: 9999; }
+    .widget-toggle {
+      width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #4f8cff, #7a5cff);
+      color: #fff; font-size: 28px; box-shadow: 0 6px 20px rgba(79,140,255,.4);
+    }
+    .widget-frame {
+      display: none; width: 400px; height: 600px; border: 0; border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.18); background: #fff;
+    }
+    .widget-frame.open { display: block; }
+  </style>
+</head>
+<body>
+  <!--
+    网页挂件（D1）：把 React 客服前端嵌入任意网页右下角。
+    使用前：
+      1. 启动后端：uvicorn api.main:app --port 8000
+      2. 启动前端：cd frontend && npm run dev（开发）或 npm run build 后由 FastAPI 托管
+      3. 把下方 src 的地址改成你的实际地址
+  -->
+  <div class="widget-wrap">
+    <iframe class="widget-frame" id="csFrame"
+            src="http://localhost:5173"></iframe>
+    <button class="widget-toggle" id="csToggle" title="在线客服">💬</button>
+  </div>
+
+  <script>
+    const frame = document.getElementById('csFrame');
+    const toggle = document.getElementById('csToggle');
+    toggle.addEventListener('click', () => {
+      const open = frame.classList.toggle('open');
+      toggle.textContent = open ? '✕' : '💬';
+    });
+  </script>
+</body>
+</html>

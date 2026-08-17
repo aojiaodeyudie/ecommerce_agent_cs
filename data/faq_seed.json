@@ -1,0 +1,242 @@
+[
+  {
+    "question": "运费怎么算？",
+    "answer": "全场满99元包邮，不满99元运费8元；偏远地区（新疆、西藏、内蒙古、宁夏、青海、甘肃）加收15元运费。",
+    "keywords": "运费,邮费,包邮",
+    "category": "shipping"
+  },
+  {
+    "question": "包邮吗？",
+    "answer": "全场满99元包邮，不满99元运费8元，偏远地区运费另计。",
+    "keywords": "包邮,免运费,运费",
+    "category": "shipping"
+  },
+  {
+    "question": "多久发货？",
+    "answer": "现货商品付款后24小时内发货，预售商品按页面标注时间发货。",
+    "keywords": "发货,多久发,几天发,什么时候发",
+    "category": "order"
+  },
+  {
+    "question": "下单后多久能到？",
+    "answer": "一般发货后3-5天送达，偏远地区5-7天；具体以物流信息为准。",
+    "keywords": "多久到,几天到,什么时候到,配送时间",
+    "category": "logistics"
+  },
+  {
+    "question": "怎么查我的订单？",
+    "answer": "请提供您的订单号，我可以帮您查询订单状态和物流信息。",
+    "keywords": "查订单,我的订单,订单在哪",
+    "category": "order"
+  },
+  {
+    "question": "怎么查物流？",
+    "answer": "请提供物流单号，我为您查询最新物流轨迹。",
+    "keywords": "查物流,物流到哪,快递到哪",
+    "category": "logistics"
+  },
+  {
+    "question": "可以改收货地址吗？",
+    "answer": "未发货订单可以修改地址；已发货订单无法修改，请联系人工客服协助。",
+    "keywords": "改地址,换地址,修改地址",
+    "category": "account"
+  },
+  {
+    "question": "怎么退货？",
+    "answer": "支持7天无理由退货（未拆封不影响二次销售）。在订单详情页申请售后，或告诉我订单号帮您操作。",
+    "keywords": "退货,怎么退,退掉",
+    "category": "refund"
+  },
+  {
+    "question": "退款多久到账？",
+    "answer": "退款审核通过后1-3个工作日原路退回，具体到账时间以支付渠道为准。",
+    "keywords": "退款多久,什么时候到账,退钱",
+    "category": "refund"
+  },
+  {
+    "question": "7天无理由退货是什么意思？",
+    "answer": "签收后7天内，商品未拆封、不影响二次销售，可无理由退货；非质量问题退货需用户承担寄回运费。",
+    "keywords": "无理由,七天无理由,7天无理由",
+    "category": "refund"
+  },
+  {
+    "question": "质量问题怎么办？",
+    "answer": "签收后15天内出现质量问题可免费换货，1年内免费维修；质量问题商家承担往返运费。",
+    "keywords": "质量问题,坏了,破损,瑕疵",
+    "category": "refund"
+  },
+  {
+    "question": "退货运费谁出？",
+    "answer": "非质量问题退货由用户承担寄回运费；质量问题由商家承担往返运费。",
+    "keywords": "运费谁出,退货运费,谁承担运费",
+    "category": "refund"
+  },
+  {
+    "question": "可以开发票吗？",
+    "answer": "可以，下单时可选择开具电子普通发票，或联系客服补开；发票金额为实际支付金额。",
+    "keywords": "发票,开票,要发票",
+    "category": "invoice"
+  },
+  {
+    "question": "发票什么时候开？",
+    "answer": "电子发票在订单完成后7个工作日内发送到您的邮箱/手机。",
+    "keywords": "发票多久,发票什么时候",
+    "category": "invoice"
+  },
+  {
+    "question": "有优惠券吗？",
+    "answer": "请告诉我您的用户ID，我为您查询可用优惠券。",
+    "keywords": "优惠券,有券吗,优惠,领券",
+    "category": "coupon"
+  },
+  {
+    "question": "怎么领优惠券？",
+    "answer": "您可以在店铺首页领取优惠券，或告诉我您的用户ID，我帮您查询可用的券。",
+    "keywords": "领券,怎么领,优惠",
+    "category": "coupon"
+  },
+  {
+    "question": "优惠券怎么用？",
+    "answer": "结算时选择可用优惠券即可自动抵扣，注意查看使用门槛（满减金额）和有效期。",
+    "keywords": "券怎么用,优惠券怎么用,怎么使用优惠券",
+    "category": "coupon"
+  },
+  {
+    "question": "支持哪些支付方式？",
+    "answer": "支持支付宝、微信支付、银行卡、花呗分期（部分商品支持）。",
+    "keywords": "支付,付款,怎么付",
+    "category": "payment"
+  },
+  {
+    "question": "可以分期付款吗？",
+    "answer": "部分商品支持花呗分期，下单时选择花呗分期即可查看期数和费率。",
+    "keywords": "分期,花呗,白条,分几期",
+    "category": "payment"
+  },
+  {
+    "question": "客服几点上班？",
+    "answer": "在线客服服务时间为每天9:00-22:00，人工坐席7×12小时在线。",
+    "keywords": "客服几点,上班时间,几点上班,在线时间",
+    "category": "service"
+  },
+  {
+    "question": "人工客服多久回复？",
+    "answer": "人工客服一般5分钟内接入，高峰期可能稍等，请耐心等待。",
+    "keywords": "多久回复,回复时间,人工多久",
+    "category": "service"
+  },
+  {
+    "question": "怎么联系人工客服？",
+    "answer": "直接回复\"转人工\"即可为您转接人工坐席。",
+    "keywords": "联系人工,找人工,人工客服",
+    "category": "service"
+  },
+  {
+    "question": "保修多久？",
+    "answer": "整机保修1年，核心部件保修3年（详见商品详情页保修说明）。",
+    "keywords": "保修,质保,保修多久",
+    "category": "warranty"
+  },
+  {
+    "question": "保修范围包括什么？",
+    "answer": "非人为损坏的质量问题在保修期内免费维修；人为损坏、进液、私自拆机不在保修范围。",
+    "keywords": "保修范围,什么能保修",
+    "category": "warranty"
+  },
+  {
+    "question": "坏了怎么维修？",
+    "answer": "请联系人工客服提交维修工单，或前往品牌授权维修点；保修期内质量问题免费维修。",
+    "keywords": "维修,修理,坏了怎么办",
+    "category": "warranty"
+  },
+  {
+    "question": "可以退差价吗？",
+    "answer": "若商品在您签收后7天内降价，可申请价保退差价，具体以订单页面价保规则为准。",
+    "keywords": "退差价,降价,价保,补差价",
+    "category": "refund"
+  },
+  {
+    "question": "怎么取消订单？",
+    "answer": "未发货订单可直接取消，已发货订单需拒收或申请退货；告诉我订单号帮您处理。",
+    "keywords": "取消订单,不想要了,取消",
+    "category": "order"
+  },
+  {
+    "question": "订单一直显示待发货？",
+    "answer": "可能是商品备货中，一般24小时内发出；超过48小时未发货请联系人工客服催单。",
+    "keywords": "待发货,没发货,一直不发货",
+    "category": "order"
+  },
+  {
+    "question": "物流信息不动了怎么办？",
+    "answer": "物流超过48小时无更新可联系人工客服为您催件，或联系快递公司核实。",
+    "keywords": "物流不动,物流没更新,快递不动",
+    "category": "logistics"
+  },
+  {
+    "question": "可以指定快递吗？",
+    "answer": "默认根据地址自动匹配快递（顺丰/京东/圆通等），暂不支持指定快递公司。",
+    "keywords": "指定快递,选快递,换快递",
+    "category": "logistics"
+  },
+  {
+    "question": "发货地址在哪？",
+    "answer": "我们的仓库位于浙江杭州和广东深圳，就近发货。",
+    "keywords": "发货地,从哪里发货,仓库在哪",
+    "category": "order"
+  },
+  {
+    "question": "收到的货不对/发错了怎么办？",
+    "answer": "请保留商品和包装，联系人工客服核实后为您安排退换，商家承担运费。",
+    "keywords": "发错,货不对,错发,少发",
+    "category": "refund"
+  },
+  {
+    "question": "少件/缺件怎么办？",
+    "answer": "请提供订单号并拍照联系人工客服，核实后为您补发或退款。",
+    "keywords": "少件,缺件,少发,漏发",
+    "category": "refund"
+  },
+  {
+    "question": "商品支持7天无理由，拆了还能退吗？",
+    "answer": "耗材类（滤网、刷头等）拆封后不支持无理由退货；整机激活使用后无质量问题不支持无理由退货。",
+    "keywords": "拆了能退吗,用过了能退吗,激活能退吗",
+    "category": "refund"
+  },
+  {
+    "question": "你们是正品吗？",
+    "answer": "我们为品牌官方直营店，所有商品均为正品，支持官方验货。",
+    "keywords": "正品,是不是真的,假货",
+    "category": "service"
+  },
+  {
+    "question": "有线下门店吗？",
+    "answer": "我们为线上官方旗舰店，暂无线下门店，支持全国联保。",
+    "keywords": "线下,实体店,门店",
+    "category": "service"
+  },
+  {
+    "question": "优惠券和活动能叠加吗？",
+    "answer": "优惠券一般不与满减活动叠加，以结算页实际抵扣为准。",
+    "keywords": "叠加,一起用,同时用",
+    "category": "coupon"
+  },
+  {
+    "question": "为什么我的优惠券用不了？",
+    "answer": "请检查优惠券的满减门槛、适用商品和有效期，或告诉我券的名称帮您核实。",
+    "keywords": "券用不了,优惠券不能用",
+    "category": "coupon"
+  },
+  {
+    "question": "买贵了能补差价吗？",
+    "answer": "签收后7天内商品降价可申请价保退差价，具体以订单页面价保规则为准。",
+    "keywords": "买贵,降价,补差价",
+    "category": "refund"
+  },
+  {
+    "question": "怎么评价商品？",
+    "answer": "确认收货后可在订单详情页评价，评价后还可获得积分。",
+    "keywords": "评价,评论,晒单",
+    "category": "service"
+  }
+]

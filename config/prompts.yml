@@ -1,0 +1,5 @@
+main_prompt_path: prompts/main_prompt.txt
+rag_summarizeprompt_path: prompts/rag_summarize.txt
+presale_prompt_path: prompts/presale_prompt.txt
+intransit_prompt_path: prompts/intransit_prompt.txt
+aftersale_prompt_path: prompts/aftersale_prompt.txt

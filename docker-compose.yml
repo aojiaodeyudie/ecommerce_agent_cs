@@ -1,0 +1,16 @@
+# 电商智能客服 Docker Compose
+# 使用：先设置 DASHSCOPE_API_KEY 环境变量，再 docker compose up -d --build
+services:
+  customer-service:
+    build: .
+    container_name: ecommerce-cs
+    ports:
+      - "8000:8000"
+    environment:
+      # 从宿主机环境变量传入（启动前 export/set 即可）
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+    volumes:
+      # 持久化：数据库 / 对话日志 / 知识库 / 运行日志
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
