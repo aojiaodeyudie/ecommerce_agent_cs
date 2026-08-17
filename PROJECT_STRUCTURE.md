@@ -7,7 +7,7 @@
 
 ## 1. 项目概览
 
-**电商智能客服**（由"扫地机器人智能客服"教学项目改造而来）：基于 LangChain v1（`create_agent` + 中间件）的 ReAct Agent，提供售前咨询 / 售中订单 / 售后处理全流程客服能力。阶段二引入**意图路由**：投诉直接转人工、高频问题 FAQ 直答（零 LLM 成本）、其余走 Agent（工具 + 分域 RAG 检索）。
+**电商智能客服**：基于 LangChain v1（`create_agent` + 中间件）的 ReAct Agent，提供售前咨询 / 售中订单 / 售后处理全流程客服能力。阶段二引入**意图路由**：投诉直接转人工、高频问题 FAQ 直答（零 LLM 成本）、其余走 Agent（工具 + 分域 RAG 检索）。
 
 - **入口**：`frontend/`（React 前端）+ `api/`（FastAPI，生产时单服务托管前后端）
 - **模型**：通义千问 qwen3-max（对话）+ text-embedding-v4（向量），走阿里云百炼 DashScope
