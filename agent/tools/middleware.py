@@ -25,7 +25,6 @@ from langgraph.types import Command
 from utils.logger_handler import logger
 
 from ecommerce.slots import SlotManager
-from ecommerce.human_handoff import set_handoff_context, clear_handoff_context
 from ecommerce.shop_profiles import build_shop_system_prompt
 from utils.config_handler import ecommerce_config
 
@@ -89,13 +88,12 @@ def monitor_tool(
             logger.info(f"[tool monitor]{tool_name} 等待二次确认")
             return ToolMessage(content=confirm_msg, tool_call_id=request.tool_call['id'])
 
-    # 5) 转人工前注入会话上下文，使工单携带完整对话记录
+    # 5) 转人工：#G3 显式把会话上下文写入工具参数（不再用全局变量），
+    #    使工单携带完整对话记录，且多用户并发互不干扰
     if tool_name == "escalate_to_human":
-        set_handoff_context(
-            session_id=ctx.get("session_id"),
-            user_id=ctx.get("user_id"),
-            transcript=ctx.get("messages", []),
-        )
+        args.setdefault("session_id", ctx.get("session_id"))
+        args.setdefault("user_id", ctx.get("user_id"))
+        args.setdefault("transcript", ctx.get("messages", []))
 
     try:
         result = handler(request)
@@ -105,9 +103,6 @@ def monitor_tool(
     except Exception as e:
         logger.error(f"工具{tool_name}调用失败，原因：{str(e)}")
         raise e
-    finally:
-        if tool_name == "escalate_to_human":
-            clear_handoff_context()
 
 
 @before_model

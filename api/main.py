@@ -22,6 +22,7 @@
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 from api.routers import business, chat, ops
 
@@ -31,10 +32,18 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS：允许任意来源（网页挂件/小程序/React 前端跨域调用）
+# CORS：#G4 默认仅允许本地开发来源（前端 5173 / 单服务 8000）；
+# 生产环境通过环境变量 CORS_ORIGINS 指定（逗号分隔），不再无条件全开
+_default_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+_env_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_env_origins or _default_origins,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],

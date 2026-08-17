@@ -188,7 +188,7 @@ Agent开发/
 | `data/ecommerce.db` | 电商业务库（自动生成，含种子数据 + FAQ 40 条） | `ecommerce/db.py` 维护 |
 | `data/chat_log.jsonl` | 结构化对话日志（自动生成，含满意度评价） | `ecommerce/chatlog.py` 维护，数据看板/badcase 数据源 |
 | `data/faq_seed.json` | **FAQ 种子配置（D3）**：可编辑，db.py 优先读取 | 修改后需清空 faq 表或删除库重灌 |
-| `data/kb/manual/` | **知识源分域目录**：故障排除 / 扫地机器人100问 / 扫拖一体100问 / 维护保养 / 选购指南 | 灌库：`python -m rag.vector_stores manual`（需 API key） |
+| `data/kb/manual/` | **知识源分域目录**：故障排除 / 扫地机器人100问 / 扫拖一体100问 / 维护保养 / 选购指南（已并入蓝鲸家电域 shop_b） | 灌库：`python -m rag.vector_stores shop_b`（需 API key） |
 
 ### 3.10 `logs/` — 日志目录
 
@@ -241,6 +241,6 @@ npm run build        # 生产构建：输出 dist/，由 FastAPI 托管
 
 测试（无需 key）：冒烟 `python test_ecommerce.py`；pytest `pytest tests/ -v`
 
-知识库灌库（需 API key，按域执行）：`python -m rag.vector_stores manual`
+知识库灌库（需 API key，按域执行）：`python -m rag.vector_stores ai` / `shop_a`~`shop_f`（7 个域）
 
 完整部署说明见 `DEPLOY.md`（Docker / nginx / 网页嵌入）。

@@ -170,3 +170,92 @@ def test_chatlog_rating():
     target = [r for r in rows if r.get("chat_id") == cid]
     assert target and target[0]["rating"] == 1
     assert chatlog.update_rating("NO-SUCH-ID", 1) is False
+
+
+# ---------------------------------------------------------------- #F9 商品按商家拆分
+
+def test_products_shop_scoped():
+    db = get_db()
+    all_prods = db.list_products()
+    assert len(all_prods) >= 40                     # 6 家商家共 50 款
+    shop_ids = {p["shop_id"] for p in all_prods}
+    assert shop_ids == {"shop_a", "shop_b", "shop_c", "shop_d", "shop_e", "shop_f"}
+
+
+def test_product_lookup_shop_isolation():
+    db = get_db()
+    # 星辉数码(S10) 只属于 shop_a
+    assert db.get_product_by_name("星辉S10", shop_id="shop_a") is not None
+    assert db.get_product_by_name("星辉S10", shop_id="shop_b") is None
+    # 智能客服全店可查
+    assert db.get_product_by_name("星辉S10") is not None
+    # 冗余词匹配（#G1）
+    assert db.get_product_by_name("星辉S10手机多少钱", shop_id="shop_a") is not None
+    assert db.get_product_by_name("车厘子多少钱", shop_id="shop_e") is not None
+    assert db.get_product_by_name("三体多少钱", shop_id="shop_f") is not None
+
+
+# ---------------------------------------------------------------- #E3/#E5 星级评价与差评
+
+def test_rating_star_and_solved():
+    cid = chatlog.log_chat(session_id="PYTEST-STAR", user_id="1001", query="测试",
+                           intent="faq", action="faq", reply="答")
+    assert chatlog.update_rating(cid, 3, "一般", "未解决") is True
+    rows = chatlog.load_logs()
+    t = [r for r in rows if r.get("chat_id") == cid][0]
+    assert t["rating"] == 3
+    assert t["solved"] == "未解决"
+    # 覆盖更新
+    assert chatlog.update_rating(cid, 5, None, "已解决") is True
+    t2 = [r for r in chatlog.load_logs() if r.get("chat_id") == cid][0]
+    assert t2["rating"] == 5
+    assert t2["solved"] == "已解决"
+
+
+def test_find_low_ratings():
+    cid = chatlog.log_chat(session_id="PYTEST-LOW", user_id="1001", query="测试",
+                           intent="faq", action="faq", reply="答")
+    chatlog.update_rating(cid, 2, "回答不准确", "未解决")
+    lows = chatlog.find_low_ratings()
+    assert any(r.get("chat_id") == cid and r["rating"] == 2 for r in lows)
+    # 4-5 星不应出现在差评列表
+    cid5 = chatlog.log_chat(session_id="PYTEST-HIGH", user_id="1001", query="测试",
+                            intent="faq", action="faq", reply="答")
+    chatlog.update_rating(cid5, 5, None, "已解决")
+    lows2 = chatlog.find_low_ratings()
+    assert not any(r.get("chat_id") == cid5 for r in lows2)
+
+
+def test_stats_includes_ratings():
+    s = chatlog.stats()
+    assert "rated_count" in s and "bad_count" in s and "bad_rate" in s
+    assert "star_dist" in s and "solved_dist" in s
+
+
+# ---------------------------------------------------------------- #G2 商家身份注入
+
+def test_shop_profile_injection():
+    from ecommerce.shop_profiles import build_shop_system_prompt, get_shop_profile
+    # 商家注入：店名/经营范围出现在提示词中
+    p = build_shop_system_prompt("【BASE】", "shop_a")
+    assert "星辉数码旗舰店" in p and "数码" in p
+    # 智能客服不注入商家身份
+    assert build_shop_system_prompt("【BASE】", None) == "【BASE】"
+    assert build_shop_system_prompt("【BASE】", "ai") == "【BASE】"
+    # 未知商家回退
+    assert get_shop_profile("unknown_shop") is None
+
+
+# ---------------------------------------------------------------- #G3 转人工显式传参
+
+def test_handoff_explicit_context():
+    from ecommerce.human_handoff import handoff
+    from ecommerce.db import get_db
+    ticket_id = handoff("测试转人工", session_id="S-HANDOFF", user_id="1001",
+                        transcript=[{"role": "user", "content": "hi"}])
+    row = get_db().get_ticket(ticket_id)
+    assert row is not None
+    import json
+    transcript = json.loads(row["transcript_json"])
+    assert transcript and transcript[0]["content"] == "hi"
+    assert row["session_id"] == "S-HANDOFF"

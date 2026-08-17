@@ -180,9 +180,12 @@ def update_address(order_id: str, new_address: str, confirm: str = "no") -> str:
 
 
 @tool(description="转人工客服，入参为原因，会创建工单并交由人工坐席处理。")
-def escalate_to_human(reason: str) -> str:
+def escalate_to_human(reason: str, session_id: str = None, user_id: str = None,
+                      transcript: list = None) -> str:
+    # #G3 会话上下文由中间件显式注入（不再依赖全局变量），工单携带完整对话记录
     from ecommerce.human_handoff import handoff
-    ticket_id = handoff(reason)
+    ticket_id = handoff(reason, session_id=session_id, user_id=user_id,
+                        transcript=transcript)
     return (f"已为您转接人工客服（工单号：{ticket_id}），"
             f"转接原因：{reason}。人工专员将尽快接入，请您稍候。")
 

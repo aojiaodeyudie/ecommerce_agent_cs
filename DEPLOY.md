@@ -25,7 +25,14 @@ copy .env.example .env        # 然后编辑 .env 填入你的 key
 #   $env:DASHSCOPE_API_KEY = "你的key"
 
 # 3) 灌入知识库（首次必做，会调用向量模型，消耗少量额度）
-python -m rag.vector_stores manual
+#    知识库按域灌入：平台域 + 6 家商家域（数据已随仓库分发时可跳过）
+python -m rag.vector_stores ai         # 智能客服平台域
+python -m rag.vector_stores shop_a     # 星辉数码
+python -m rag.vector_stores shop_b     # 蓝鲸家电
+python -m rag.vector_stores shop_c     # 云端生活
+python -m rag.vector_stores shop_d     # 绿野家居
+python -m rag.vector_stores shop_e     # 鲜橙生鲜
+python -m rag.vector_stores shop_f     # 悦读书香
 
 # 4) 启动后端（FastAPI）
 uvicorn api.main:app --reload --port 8000
@@ -69,9 +76,10 @@ docker compose logs -f
 - API Key 通过 `docker compose` 时的环境变量传入（见 `docker-compose.yml`）
 - `data/` 目录挂载为卷，数据库/日志/知识库持久化在宿主机
 
-首次启动后需在容器内灌库：
+首次启动后需在容器内灌库（按域执行，如平台域 + 各商家域）：
 ```bash
-docker compose exec customer-service python -m rag.vector_stores manual
+docker compose exec customer-service python -m rag.vector_stores ai
+docker compose exec customer-service python -m rag.vector_stores shop_b
 ```
 
 ---

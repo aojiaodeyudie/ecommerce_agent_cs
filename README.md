@@ -112,8 +112,9 @@ pytest tests/ -v
 ```bash
 docker compose up -d --build
 # 访问 http://服务器IP:8000(API + 前端)
-# 首次启动后需在容器内灌库:
-docker compose exec customer-service python -m rag.vector_stores manual
+# 首次启动后需在容器内灌库(按域执行,数据已随仓库分发时可跳过):
+docker compose exec customer-service python -m rag.vector_stores ai
+docker compose exec customer-service python -m rag.vector_stores shop_b
 ```
 
 ## 📄 文档
@@ -121,10 +122,3 @@ docker compose exec customer-service python -m rag.vector_stores manual
 - [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md):完整文件结构说明
 - [`DEPLOY.md`](DEPLOY.md):部署指南(本地/Docker/nginx/网页嵌入)
 
-## 📝 License
-
-MIT License(如需开源发布,请确认仓库可见性与敏感信息)
-
----
-
-> ⚠️ **注意**:`.env`(含 API Key)已被 `.gitignore` 忽略,不会提交到仓库;请勿将密钥写入代码或提交到公开仓库。

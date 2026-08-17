@@ -15,6 +15,8 @@ from utils.path_tool import get_abs_path
 from utils.logger_handler import logger
 
 LOG_FILE = get_abs_path("data/chat_log.jsonl")
+# #G5 评价独立追加日志：update_rating 不再重写整个对话日志（O(n)→O(1)）
+RATING_LOG_FILE = get_abs_path("data/rating_log.jsonl")
 
 
 def log_chat(*, session_id, user_id, query, intent, action, reply=None,
@@ -51,38 +53,41 @@ def log_chat(*, session_id, user_id, query, intent, action, reply=None,
 def update_rating(chat_id: str, rating: int, reason: str | None = None,
                   solved: str | None = None) -> bool:
     """
-    按 chat_id 更新满意度评价（#E3：星级评分）。
+    按 chat_id 更新满意度评价（#E3：星级评分，#G5 追加式写入）。
     :param rating: 1~5 星；-1 兼容旧版差评。
     :param reason: 问题描述（选填）
     :param solved: 是否解决问题（"已解决"/"未解决"）
-    重写日志文件。
+
+    #G5 优化：评价写入独立追加日志（rating_log.jsonl），不再重写对话主日志，
+    由 load_logs() 读取时合并，避免日志增长后全文件重写的性能问题。
     """
     if not os.path.exists(LOG_FILE):
         return False
-    rows = load_logs()
-    changed = False
-    for r in rows:
-        if r.get("chat_id") == chat_id:
-            r["rating"] = rating
-            if reason:
-                r["rating_reason"] = reason
-            if solved:
-                r["solved"] = solved
-            changed = True
-    if not changed:
+    # 确认该 chat_id 存在（读主日志判断，避免评价无主记录）
+    exists = any(r.get("chat_id") == chat_id for r in _read_main_logs())
+    if not exists:
         return False
+    entry = {
+        "chat_id": chat_id,
+        "rating": rating,
+        "ts": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
+    if reason:
+        entry["rating_reason"] = reason
+    if solved:
+        entry["solved"] = solved
     try:
-        with open(LOG_FILE, "w", encoding="utf-8") as f:
-            for r in rows:
-                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        os.makedirs(os.path.dirname(RATING_LOG_FILE), exist_ok=True)
+        with open(RATING_LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         return True
     except OSError as e:
         logger.warning(f"[chatlog]评价写入失败：{e}")
         return False
 
 
-def load_logs(limit: int | None = None) -> list[dict]:
-    """读取全部对话日志（可选限制条数）。"""
+def _read_main_logs() -> list[dict]:
+    """读取对话主日志（原始记录，不含评价合并）。"""
     if not os.path.exists(LOG_FILE):
         return []
     rows = []
@@ -95,6 +100,45 @@ def load_logs(limit: int | None = None) -> list[dict]:
                 rows.append(json.loads(line))
             except json.JSONDecodeError:
                 continue
+    return rows
+
+
+def _read_ratings() -> dict[str, dict]:
+    """读取评价追加日志，按 chat_id 聚合（后写入的覆盖先写入的）。"""
+    if not os.path.exists(RATING_LOG_FILE):
+        return {}
+    ratings: dict[str, dict] = {}
+    with open(RATING_LOG_FILE, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+                cid = r.get("chat_id")
+                if cid:
+                    ratings[cid] = r
+            except json.JSONDecodeError:
+                continue
+    return ratings
+
+
+def _merge_ratings(rows: list[dict], ratings: dict[str, dict]) -> None:
+    """把评价记录合并进对话日志行（就地修改）。"""
+    for r in rows:
+        rating_entry = ratings.get(r.get("chat_id"))
+        if rating_entry:
+            r["rating"] = rating_entry.get("rating")
+            if rating_entry.get("rating_reason"):
+                r["rating_reason"] = rating_entry["rating_reason"]
+            if rating_entry.get("solved"):
+                r["solved"] = rating_entry["solved"]
+
+
+def load_logs(limit: int | None = None) -> list[dict]:
+    """读取全部对话日志（#G5 自动合并评价记录；可选限制条数）。"""
+    rows = _read_main_logs()
+    _merge_ratings(rows, _read_ratings())
     if limit is not None:
         rows = rows[-limit:]
     return rows

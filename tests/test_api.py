@@ -192,3 +192,56 @@ def test_ticket_soft_delete():
     r = client.delete("/api/tickets")
     assert r.status_code == 200
     assert r.json()["deleted_count"] >= 0
+
+
+# ---------------------------------------------------------------- #E3 星级评价接口
+
+def test_rating_star_api():
+    # 产生一条对话记录
+    r = client.post("/api/chat", json={"message": "运费怎么算", "user_id": "1001"})
+    cid = r.json()["chat_id"]
+    # 合法星级 + solved
+    r = client.post("/api/chat/rating", params={"chat_id": cid, "rating": 2, "solved": "未解决", "reason": "回答太慢"})
+    assert r.status_code == 200
+    assert r.json()["rating"] == 2
+    # 非法星级 6 → 400
+    r = client.post("/api/chat/rating", params={"chat_id": cid, "rating": 6})
+    assert r.status_code == 400
+    # 非法 solved → 400
+    r = client.post("/api/chat/rating", params={"chat_id": cid, "rating": 4, "solved": "xx"})
+    assert r.status_code == 400
+    # 不存在的 chat_id → 404
+    r = client.post("/api/chat/rating", params={"chat_id": "NO-SUCH-ID", "rating": 3})
+    assert r.status_code == 404
+
+
+# ---------------------------------------------------------------- #E4/#E5 差评接口
+
+def test_bad_ratings_api():
+    # 制造一条 1 星差评
+    r = client.post("/api/chat", json={"message": "运费怎么算", "user_id": "1001"})
+    cid = r.json()["chat_id"]
+    r = client.post("/api/chat/rating", params={"chat_id": cid, "rating": 1, "solved": "未解决"})
+    assert r.status_code == 200
+    # 列表包含该差评
+    r = client.get("/api/ratings/bad")
+    assert r.status_code == 200
+    assert any(x["chat_id"] == cid for x in r.json())
+    # 回复差评
+    r = client.post(f"/api/ratings/bad/{cid}/reply", params={"reply": "已跟进处理"})
+    assert r.status_code == 200
+    # 删除差评
+    r = client.delete(f"/api/ratings/bad/{cid}")
+    assert r.status_code == 200
+    assert r.json()["deleted"] is True
+    # 删除后 404
+    r = client.delete(f"/api/ratings/bad/{cid}")
+    assert r.status_code == 404
+
+
+def test_stats_rating_fields():
+    r = client.get("/api/stats")
+    assert r.status_code == 200
+    body = r.json()
+    assert "rated_count" in body and "bad_count" in body
+    assert "bad_rate" in body and "star_dist" in body and "solved_dist" in body
